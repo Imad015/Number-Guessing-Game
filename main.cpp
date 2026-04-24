@@ -1,14 +1,13 @@
 #include <iostream>
 #include <limits>
 #include <ctime>
+#include <cstdlib>
+
 using namespace std;
 enum levelGame{easy=1, med =2 , hard =3};
 
-
-
 int RandomNumber(int From ,int To){
-    int number = rand()%(From-To+1)+From;
-    return number;
+    return rand() % (To - From + 1) + From;
 }
 
 int ReadNumber(string message){
@@ -40,19 +39,15 @@ bool CheckWin(int userNumber, int randomNumber){
 }
 
 int InputLevelGame(int numberChoise){
-    numberChoise = (levelGame)numberChoise;
-    switch (numberChoise)
+    switch ((levelGame)numberChoise)
     {
     case levelGame::hard:
         return RandomNumber(1,100);
     case levelGame::med:
         return RandomNumber(1,50);
     case levelGame::easy:
-        return RandomNumber(1,25);
     default:
-        return -100;
-        break;
-
+        return RandomNumber(1,25);
     }
 }
 
@@ -67,28 +62,29 @@ string Up_Down(int randomNumber, int userNumber){
 
 void Game(){
     int count = 0;
-    cout<<"enter Level Game: \n";
-    cout<<"[1]: easy(1,25)\n [2]: med(1,50)\n [3]: hard(1,100)";
+    cout<<"Select Difficulty Level: \n";
+    cout<<"[1]: Easy (1-25)\n[2]: Medium (1-50)\n[3]: Hard (1-100)\n";
     int n =CheckNumber(1,3);
     int randomNumber = InputLevelGame(n);
     int GusessingNumber;
-    do{
+    bool won = false;
+
+    while(!won){
         count++;
-        GusessingNumber = ReadNumber("enter Guessing Number: ");
+        GusessingNumber = ReadNumber("Enter your guess: ");
         if(CheckWin(randomNumber,GusessingNumber)){
-            cout<<"Good Job you win"<<endl;
-            cout<<"and s is "<<count<<endl;
-            break;
+            cout << "Good Job! You won in " << count << " attempts." << endl;
+            won = true;
         }
         else{
-
             cout<<Up_Down(randomNumber,GusessingNumber);
-            cout<<"Enter Again!\n";
+            cout<<"Try again!\n";
         } 
-    }while(1);
+    }
 }
 
 
 int main(){
+    srand((unsigned)time(NULL));
     Game();
 }
